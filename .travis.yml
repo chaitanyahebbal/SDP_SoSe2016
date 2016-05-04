@@ -109,7 +109,7 @@ script:
   - catkin_make test  # This will return non-zero if a test fails.
 
 # limit build to only master branch
-#branches:
-#    only:
-#        - master
+branches:
+    only:
+        - master
 
