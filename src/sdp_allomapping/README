@@ -1,0 +1,61 @@
+Hey Guys:
+
+I have been working in making a node for SDP.
+The idea is trying not to code and use the already done implementations.
+
+
+####################################################
+Instructions to compile the new package.
+####################################################
+- Have a AtHome working repository
+- Install the default node for depthimage_to_laserscan
+   sudo apt-get install ros-indigo-depthimage-to-laserscan
+- Install the default node for gmapping
+  sudo apt-get install ros-indigo-slam-gmapping
+- Compile the repositories
+  catkin build
+  or just compile the package 
+  catkin build sdp_egomapping
+
+####################################################
+Instructions to run
+####################################################
+
+- Run roscore
+- Run drivers, it was not added to the demo launch
+	roslaunch mdr_bringup_sim robot.launch
+- Run package
+	roslaunch sdp_egomapping demo.launch 
+
+- Rviz must be opened.
+	add Depth image attribute and select /cam3d/dept_registered/image_raw as topic
+	add LaserScan attribute and select /scan as a topic.
+	LaserScan must match the limit of the camera.
+
+
+#####################################################
+Already implemented in the node:
+
+---> run rviz  for visualization
+---> depthimage_to_laserscan for transforming camera image to laser scan
+
+Parameters can be updated on the demo.launch file
+
+#####################################################
+TODO
+
+---> Transforms laserscans to map
+---> Save Map (map_server node can be used)
+---> Perhaps it will be a good idea to create a common rviz configuration (not need to add any topic in rviz).
+
+Once you have done this. Add you info as a maintainer in package.xml inside sdp_egomapping folder.
+
+
+Don't hesitate to contact me if you have problems.
+
+Regards,
+
+Jose
+
+
+
