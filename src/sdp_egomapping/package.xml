@@ -39,9 +39,14 @@
   <!-- Use test_depend for packages you need only for testing: -->
   <!--   <test_depend>gtest</test_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
-  <buildtool_depend>depthimage_to_laserscan</buildtool_depend>
-  <buildtool_depend>cob_scan_unifier</buildtool_depend>
-  <buildtool_depend>gmapping</buildtool_depend>
+  <build_depend>depthimage_to_laserscan</build_depend>
+  <build_depend>cob_scan_unifier</build_depend>
+  <build_depend>gmapping</build_depend>
+
+  <run_depend>depthimage_to_laserscan</run_depend>
+  <run_depend>cob_scan_unifier</run_depend>
+  <run_depend>gmapping</run_depend>
+  <run_depend>slam_gmapping</run_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
