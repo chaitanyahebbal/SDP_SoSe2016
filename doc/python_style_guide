@@ -1,0 +1,159 @@
+This python style guide makes sure that consistency is followed in the project. There are many aspects in to be considered but here in this sytle guide only a few aspects are mentioned. Whenever there is some confusion about the coding styles, we all shall make a combined decision together.
+
+------------------------------------------------------------------------------------------------------------------
+Indentation
+---------------
+Use 4 spaces per indentation level.
+
+Also if there are long lines the continuation of lines must align the wrapped elements vertically.
+
+EX: The following are good examples
+
+# Aligned with opening delimiter.
+foo = long_function_name(var_one, var_two,
+                         var_three, var_four)
+
+
+# More indentation included to distinguish this from the rest.
+def long_function_name(
+        var_one, var_two, var_three,
+        var_four):
+    print(var_one)
+
+
+# Hanging indents should add a level.
+foo = long_function_name(
+    var_one, var_two,
+    var_three, var_four)
+
+just a word about hanging indents:
+Hanging indentation is a type-setting style where all the lines in a paragraph are indented except the first line
+
+The below examples are bad and must not be followed.
+					   ---
+Bad examples:
+
+# Arguments on first line forbidden when not using vertical alignment.
+foo = long_function_name(var_one, var_two,
+    var_three, var_four)
+
+
+# Further indentation required as indentation is not distinguishable.
+def long_function_name(
+    var_one, var_two, var_three,
+    var_four):
+    print(var_one)
+
+The closing brace/bracket/parenthesis on multi-line constructs may either line up under the first non-whitespace character of the last line of list, as in: 
+
+my_list = [
+    1, 2, 3,
+    4, 5, 6,
+    ]
+result = some_function_that_takes_arguments(
+    'a', 'b', 'c',
+    'd', 'e', 'f',
+    )
+
+or it may be lined up under the first character of the line that starts the multi-line construct, as in:
+
+my_list = [
+    1, 2, 3,
+    4, 5, 6,
+]
+result = some_function_that_takes_arguments(
+    'a', 'b', 'c',
+    'd', 'e', 'f',
+)
+
+------------------------------------------------------------------------------------------------------------------
+
+Tabs or Spaces
+----------------
+
+Spaces are the preferred indentation method.
+
+Tabs should be used solely to remain consistent with code that is already indented with tabs.
+
+Python 3 disallows mixing the use of tabs and spaces for indentation.
+
+Python 2 code indented with a mixture of tabs and spaces should be converted to using spaces exclusively.
+
+------------------------------------------------------------------------------------------------------------------
+
+Maximum line length
+--------------------
+
+Limit all lines to a maximum of 79 characters.
+
+For flowing long blocks of text with fewer structural restrictions (docstrings or comments), the line length should be limited to 72 characters. 	
+
+------------------------------------------------------------------------------------------------------------------
+
+Blank lines
+-------------
+
+Surround top-level function and class definitions with two blank lines.
+
+Method definitions inside a class are surrounded by a single blank line.
+
+Extra blank lines may be used (sparingly) to separate groups of related functions. Blank lines may be omitted between a bunch of related one-liners (e.g. a set of dummy implementations).
+
+Use blank lines in functions, sparingly, to indicate logical sections. 
+
+------------------------------------------------------------------------------------------------------------------
+
+Import statments
+-----------------
+
+Imports should be on seperate lines
+
+Ex:
+
+import os
+import sys
+
+Also its fine to follow this
+
+EX: from subprocess import Popen, PIPE
+
+ 
+Imports are always put at the top of the file, just after any module comments and docstrings, and before module globals and constants.
+
+Imports should be grouped in the following order:
+
+1.standard library imports
+2.related third party imports
+3.local application/library specific imports
+
+
+Always use complete namespaces in the import statements.
+
+import mypkg.sibling
+from mypkg import sibling
+from mypkg.sibling import example
+
+------------------------------------------------------------------------------------------------------------------
+
+Comments
+---------
+
+As discussed many times during our lectures, it's better not have comments at all rather than having some stupid comments. But if you would like add comments to your code its better to have your comments reviewed by the code reviewers.
+
+------------------------------------------------------------------------------------------------------------------
+
+General Naming conventions
+---------------------------
+
+1. Class names should normally use the CapWords convention. 
+2. Function names should be lowercase, with words separated by underscores as necessary to improve readability.
+MixedCase is allowed only in contexts where that's already the prevailing style (e.g. threading.py), to retain backwards compatibility. 
+3. For variable names lowercase with words separated by underscores as necessary to improve readability.
+
+------------------------------------------------------------------------------------------------------------------
+ 
+
+ References:(PEP8--Style guide for python guide)
+ ------------------------------------------------
+
+ 1. https://www.python.org/dev/peps/pep-0008/#fn-hi
