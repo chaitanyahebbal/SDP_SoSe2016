@@ -10,8 +10,12 @@ Instructions to compile the new package.
 - Have a AtHome working repository
 - Install the default node for depthimage_to_laserscan
    sudo apt-get install ros-indigo-depthimage-to-laserscan
+- Install the default node for gmapping
+  sudo apt-get install ros-indigo-slam-gmapping
 - Compile the repositories
-   catkin build
+  catkin build
+  or just compile the package 
+  catkin build sdp_egomapping
 
 ####################################################
 Instructions to run
