@@ -1,0 +1,60 @@
+Coding convention for ROS files:
+
+------------------------------------------------------------------------------------------------------------------
+
+Indentation
+---------------
+
+Use 4 spaces per indentation.
+
+Use spaces instead of tabs for indentation.
+
+-----------------------------------------------------------------------------------------------------------------
+
+Variable naming convention
+---------------------------
+1. For variable names lowercase with words separated by underscores as necessary to improve readability.
+2. Use ${PROJECT_NAME} for global variables, targets and labels instead of repeating the project name manually or using fixed names.
+3. Always quote variable that represent a string.
+4. When storing paths in variables, do NOT have the cmake variables end up with a slash.
+5. Use if(DEFINED varname) to check if a variable is set.
+
+------------------------------------------------------------------------------------------------------------------
+
+Maximum line length
+--------------------
+
+Limit all lines to a maximum of 79 characters.
+
+------------------------------------------------------------------------------------------------------------------
+
+Blank lines
+-------------
+
+Nodes or nodelets in launch file are surrounded by a single blank line.
+
+Extra blank lines may be used (sparingly) to separate groups of related blocks. Blank lines may be omitted between a bunch of related one-liners.
+
+------------------------------------------------------------------------------------------------------------------
+
+Comments
+---------
+
+As discussed many times during our lectures, it's better not have comments at all rather than having some stupid comments. But if you would like add comments to your code its better to have your comments reviewed by the code reviewers.
+
+------------------------------------------------------------------------------------------------------------------
+
+General conventions
+---------------------------
+
+1. Use REQUIRED on all calls to find_package if they aren’t actually optional.
+2. Use UPPER_CASE for arguments to CMake functions and macros (e.g. REQUIRED, NO_MODULE, QUIET).
+3. Whenever using a list of items (i.e. in find_package(COMPONENTS ...) or files which should be build or installed) keep them alphabetically sorted. This improves readability when looking for specific items.
+
+------------------------------------------------------------------------------------------------------------------
+ 
+
+References:
+------------------------------------------------
+
+1. http://docs.ros.org/jade/api/catkin/html/user_guide/standards.html
