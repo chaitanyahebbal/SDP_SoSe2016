@@ -86,7 +86,8 @@ install:
   # Add upstream and update from master branch
   - cd $CI_SOURCE_PATH
   - git remote add upstream https://github.com/oarriaga/SDP_SoSe2016.git
-  - git pull upstream master
+  - git fetch upstream
+  - git merge upstream/master -m "automatic merge with master"
   # Add the package under integration to the workspace using a symlink.
   - cd ~/catkin_ws/src
   - ln -s $CI_SOURCE_PATH .
@@ -111,6 +112,9 @@ script:
   # Testing: Use both run_tests (to see the output) and test (to error out).
   - catkin_make run_tests  # This always returns 0, but looks pretty.
   - catkin_make test  # This will return non-zero if a test fails.
+after_success:
+  - cd $CI_SOURCE_PATH
+  - git push origin master
 
 # limit build to only master branch
 branches:
