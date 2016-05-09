@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package>
-  <name>sdp_egomapping</name>
+  <name>sdp_allomapping</name>
   <version>0.0.1</version>
-  <description> sdp_egommapping includes the necessary packages to map an egocentric map
+  <description> sdp_allommapping includes the necessary packages to map an allocentric map
 	</description>
 
   <maintainer email="jose.mayoral@smail.inf.h-brs.de">Jose Carlos Mayoral</maintainer>
