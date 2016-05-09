@@ -15,7 +15,7 @@
 
     <!-- rviz / default config -->    
     <group if="$(arg show_rviz)">
-       <node name="rviz" pkg="rviz" type="rviz" args="-d $(find sdp_egomapping)/rviz/sdp.rviz"/>
+       <node name="rviz" pkg="rviz" type="rviz" args="-d $(find sdp_allomapping)/rviz/sdp.rviz"/>
      </group>
 
 	<!-- run pointcloud_to_laserscan node -->
