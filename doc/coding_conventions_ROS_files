@@ -9,15 +9,51 @@ Use 4 spaces per indentation.
 
 Use spaces instead of tabs for indentation.
 
+Also indent long cmake commands like for find_package and add_library.
+
+Example : 
+
+<launch>
+
+    <!-- For launching a simple node-->
+    <node name="talker" pkg="rospy_tutorials" type="talker" />
+
+</launch>
+
+Example : find_package(catkin REQUIRED
+            COMPONENTS
+            moveit
+            roscpp
+            sensor_msgs
+            )
+
+
 -----------------------------------------------------------------------------------------------------------------
 
 Variable naming convention
 ---------------------------
 1. For variable names lowercase with words separated by underscores as necessary to improve readability.
+
+    Example : set(${PROJECT_NAME}_use_feature 42 CACHE STRING "description")
+
 2. Use ${PROJECT_NAME} for global variables, targets and labels instead of repeating the project name manually or using fixed names.
+
+    Example : catkin_add_gtest(${PROJECT_NAME}_test ...)
+
 3. Always quote variable that represent a string.
+
+    Example : set(myvar "foo")
+
 4. When storing paths in variables, do NOT have the cmake variables end up with a slash.
+
+    Example : set(my_path "path/to/foo/") #DON'T
+
 5. Use if(DEFINED varname) to check if a variable is set.
+
+    Example : if(DEFINED myvar)
+                #  ...
+              endif()
+
 
 ------------------------------------------------------------------------------------------------------------------
 
@@ -35,6 +71,17 @@ Nodes or nodelets in launch file are surrounded by a single blank line.
 
 Extra blank lines may be used (sparingly) to separate groups of related blocks. Blank lines may be omitted between a bunch of related one-liners.
 
+Example : 
+
+<launch>
+
+  <!-- For launching a simple node-->
+  <node name="talker" pkg="rospy_tutorials" type="talker" />
+
+  <node name="listener pkg="rospy_tutorials" type="listener" />
+
+</launch>
+
 ------------------------------------------------------------------------------------------------------------------
 
 Comments
@@ -48,8 +95,31 @@ General conventions
 ---------------------------
 
 1. Use REQUIRED on all calls to find_package if they aren’t actually optional.
+
+    Example : find_package(catkin REQUIRED)
+
 2. Use UPPER_CASE for arguments to CMake functions and macros (e.g. REQUIRED, NO_MODULE, QUIET).
+
 3. Whenever using a list of items (i.e. in find_package(COMPONENTS ...) or files which should be build or installed) keep them alphabetically sorted. This improves readability when looking for specific items.
+
+    Example : find_package(catkin REQUIRED
+                COMPONENTS
+                moveit
+                roscpp
+                sensor_msgs
+                )
+
+4. Add roslaunch_add_file_check() in the CMakeLists.txt under the CATKIN_ENABLE_TESTING.
+
+    Example : if(CATKIN_ENABLE_TESTING)
+                find_package(roslaunch REQUIRED)
+                roslaunch_add_file_check(ros/launch "workspace_finder_config_file:=${CMAKE_CURRENT_SOURCE_DIR}/ros/config/workspace_constraints.yaml
+                                       object_constraints_config_file:=${CMAKE_CURRENT_SOURCE_DIR}/ros/config/object_constraints.yaml")
+              endif()
+
+5. Also add roslaunch_add_file_check as a build dependency in package.xml.
+
+    Example :   <build_depend>roslint</build_depend>
 
 ------------------------------------------------------------------------------------------------------------------
  
