@@ -1,9 +1,9 @@
-#**SDP_egomapping**
+#**SDP_allomapping**
 
-This package allows a robot to create an egocentric map,
+This package allows a robot to create an allocentric map,
 projecting a depthimage provided by the camera into laserscans.
 This perceived infomation is merged with the laserscans
-readings.
+readings. This readings are converted into an egocentric map using gmapping node.
 
 * Maintainer status: in development.
 * Maintainer: SDP Team <Hochschule Bonn Rhein Sieg>
@@ -59,3 +59,8 @@ repository specified to cob_scan_unifier.
   * loop_rate
     * Not specified.
 
+
+3. gmapping...
+
+
+![Alt text](/doc/imgs/nodegraph.bmp "Node Graph")
