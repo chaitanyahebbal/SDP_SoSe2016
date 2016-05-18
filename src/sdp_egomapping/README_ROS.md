@@ -11,9 +11,9 @@ readings.
 
 ##Dependencies.
 
-1. deptimage_to_laserscans
+1 deptimage_to_laserscans
  Takes a depth image and generates a 2D laser scan representation.
-* **Source**: <http://wiki.ros.org/depthimage_to_laserscan> 
+* Source: <http://wiki.ros.org/depthimage_to_laserscan> 
 
 * Subscribed Topics.
   * image (sensor_msgs/Image).
@@ -43,7 +43,7 @@ The topic will be subscribed to from the same namespace as image.
     * The frame id of the laser scan. For point clouds coming from an "optical" frame with Z forward, this value should be set to the corresponding frame with X forward and Z up.
 
 
-2. cob_scan_unifier
+2 cob_scan_unifier
   * This node is part of cob_driver package, however there is not
 repository specified to cob_scan_unifier.
   * **cob_driver Source:** <http://wiki.ros.org/cob_driver>
