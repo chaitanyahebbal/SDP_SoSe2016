@@ -11,6 +11,11 @@ folder
 ```package.xml``` files
 * limits build to only ```master``` branch
 
+#### Convention Checking
+* Launch files and package dependencies are checked through running ```roslaunch_add_file_check```, specified in ```CMakeLists.txt```.
+* ```catkin run_tests``` will run ```roslaunch_add_file_check``` without returning an error like ```catkin test```, but shows message of the actual error. Look for ```FAILURE``` tag in the output message.
+* ```roslint``` is evoked by adding ```--make-args roslint``` to ```catkin build```
+
 #### Additional dependencies
 
 Additional Git repositories can be included in the

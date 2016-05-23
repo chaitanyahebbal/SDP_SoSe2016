@@ -67,7 +67,7 @@ before_install:
   - sudo sh -c "echo \"deb http://packages.ros.org/ros/ubuntu $ROS_CI_DESKTOP main\" > /etc/apt/sources.list.d/ros-latest.list"
   - wget http://packages.ros.org/ros.key -O - | sudo apt-key add -
   - sudo apt-get update -qq
-  - sudo apt-get install -y python-catkin-pkg python-rosdep python-wstool ros-$ROS_DISTRO-catkin
+  - sudo apt-get install -y python-catkin-pkg python-rosdep python-wstool ros-$ROS_DISTRO-catkin python-catkin-tools
   - source /opt/ros/$ROS_DISTRO/setup.bash
   # Prepare rosdep to install dependencies.
   - sudo rosdep init
@@ -78,10 +78,10 @@ install:
   - mkdir -p ~/catkin_ws/src
   - cd ~/catkin_ws/src
   - catkin_init_workspace
-  # Create the devel/setup.bash (run catkin_make with an empty workspace) and
+  # Create the devel/setup.bash (run catkin build with an empty workspace) and
   # source it to set the path variables.
   - cd ~/catkin_ws
-  - catkin_make
+  - catkin build
   - source devel/setup.bash
   # Add upstream and update from master branch
   - cd $CI_SOURCE_PATH
@@ -105,13 +105,13 @@ before_script:
   - rosdep install -y --from-paths src --ignore-src --rosdistro $ROS_DISTRO
 
 # Compile and test. If the CATKIN_OPTIONS file exists, use it as an argument to
-# catkin_make.
+# catkin build.
 script:
   - cd ~/catkin_ws
-  - catkin_make $( [ -f $CATKIN_OPTIONS ] && cat $CATKIN_OPTIONS )
+  - catkin build $( [ -f $CATKIN_OPTIONS ] && cat $CATKIN_OPTIONS )
   # Testing: Use both run_tests (to see the output) and test (to error out).
-  - catkin_make run_tests  # This always returns 0, but looks pretty.
-  - catkin_make test  # This will return non-zero if a test fails.
+  - catkin run_tests  # This always returns 0, but looks pretty.
+  - catkin test  # This will return non-zero if a test fails.
 
 # limit build to only master branch
 branches:
