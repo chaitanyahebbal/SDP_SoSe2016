@@ -1,0 +1,1283 @@
+SDP - C++ coding conventions
+
+
+
+• "In general, every .cc file should have an associated .h file. There are some common
+exceptions, such as unittests and small .cc files containing just a main() function." [1]
+• "Use standard order for readability and to avoid hidden dependencies: Related header,
+C library, C++ library, other libraries’ .h, your project’s .h." [1]
+• "All current GCC code uses a space between the function name and the left parenthesis
+in a function call. Essentially all C++ code omits that space, which is more consistent
+with C++ syntax. " [2]
+• "In new code variables which are used in a small scope should be defined at the point
+of first use, rather than at the top of the function. Variables which are used throughout
+the function may be defined at the top of the function, as in C." [2]
+• " Templates. Start template parameter names with a leading upper-case letter. Specify
+template parameter and argument listswith spaces to the outside of the angle brackets.
+
+1 template <typename Type> // template declarat ion header
+2 sometype <Type> : : sometype ( ) { . . . } // constructor def ini t ion
+3 somefunc <int > (3) // function c a l l
+"
+
+• "Classes. Indent all elements defined within the body of a class by two spaces. All
+constructors should initialize all data members in the member initializer list. (If not,
+the compiler will implicitly initialize non-POD fields, and any initialization in the body
+of the constructor implies extra work.)
+
+
+1 class my_class {
+2 public :
+3 my_class ( )
+4 : f ield1_ ( 0 ) , f ield2_ (NULL_TREE)
+5 { }
+6
+7 // Meaningful comment .
+8 int
+9 field1 ( )
+10 {
+11 return this->field1_ ;
+12 }
+13
+14 private :
+15 // Comment about field1 .
+16 int field1_ ;
+17 // Comment about field2 .
+18 tree field2_ ;
+19 } ;
+" [2]
+
+• File Names
+
+When a file is formatted, the newly indented file retains the original file name. A copy of the original file is created with an .orig appended to the original file name. (This can be set to a different string by the option --suffix=, or suppressed altogether by the options -n or --suffix=none). Thus, after indenting SourceFile.cpp the indented file will be named SourceFile.cpp, while the original pre-indented file will be renamed to SourceFile.cpp.orig." [3]
+
+
+
+• "Forward Declarations
+Avoid using forward declarations where possible. Just #include the headers you need."
+[1]
+• "Inline Functions
+Define functions inline only when they are small, say, 10 lines or fewer." [1]
+• "Names and Order of Includes
+Use standard order for readability and to avoid hidden dependencies: Related header,
+C library, C++ library, other libraries’ .h, your project’s .h." [1]
+• "Namespaces
+With few exceptions, place code in a namespace. Namespaces should have unique
+names based on the project name, and possibly its path. Unnamed namespaces in .cc
+files are encouraged. Do not use using-directives. Do not use inline namespaces." [1]
+• "Nonmember, StaticMember, and Global Functions
+Prefer placing nonmember functions in a namespace; use completely global functions
+rarely. Prefer grouping functions with a namespace instead of using a class as if it were
+a namespace. Static methods of a class should generally be closely related to instances
+of the class or the class’s static data." [1]
+2
+• "Local Variables
+Place a function’s variables in the narrowest scope possible, and initialize variables in
+the declaration." [1]
+• "Static and Global Variables
+Variables of class type with static storage duration are forbidden: they cause hard-tofind
+bugs due to indeterminate order of construction and destruction. However, such
+variables are allowed if they are constexpr: they have no dynamic initialization or destruction.
+Objects with static storage duration, including global variables, static variables, static
+class member variables, and function static variables, must be Plain Old Data (POD):
+only ints, chars, floats, or pointers, or arrays/structs of POD." [1]
+• "Structs vs. Classes
+Use a struct only for passive objects that carry data; everything else is a class." [1]
+• "Inheritance
+Composition is often more appropriate than inheritance. When using inheritance,
+make it public." [1]
+• "Multiple Inheritance
+Only very rarely is multiple implementation inheritance actually useful. We allow multiple
+inheritance only when at most one of the base classes has an implementation; all
+other base classesmust be pure interface classes tagged with the Interface suffix." [1]
+• "Interfaces
+Classes that satisfy certain conditions are allowed, but not required, to end with an
+Interface suffix." [1]
+• "Operator Overloading
+Overload operators judiciously. Do not create user-defined literals." [1]
+• "Declaration Order
+Use the specified order of declarations within a class: public: before private:, methods
+before data members (variables), etc." [1]
+
+For roslint:
+• "Options File
+
+An OPTIONAL default options file may be used to supplement or replace the command line options. 
+
+The command line options have precedence. If there is a conflict between a command line option and an option in the default options file, the command line option will be used.
+Artistic Style looks for this file in the following locations (in order):
+the file indicated by the --options= command line option;
+the file and directory indicated by the environment variable ARTISTIC_STYLE_OPTIONS (if it exists);
+the file named .astylerc in the directory pointed to by the HOME environment variable (e.g. "$HOME/.astylerc" on Linux);
+the file named astylerc in the directory pointed to by the USERPROFILE environment variable (e.g. "%USERPROFILE%\astylerc" on Windows).
+This option file lookup can be disabled by specifying --options=none on the command line.
+Options may be set apart by new-lines, tabs, commas, or spaces.
+Long options in the options file may be written without the preceding '--'.
+Lines within the options file that begin with '#' are considered line-comments.
+Example of a default options file:
+
+# this line is a comment
+--style=allman      # this is a line-end comment
+# long options can be written without the preceding '--'
+indent-switches     # cannot do this on the command line
+# short options must have the preceding '-'
+-t -p
+# short options can be concatenated together
+-M60Ucv" [3]
+
+• "Disable Block
+
+Blocks of code can be disabled using "off" and "on" tags. The tags are included in the source file as comments. The comment may be a C comment (/* ... */) or a C++ line comment (//). The tag must be included in a single line comment. If the comment exceeds one line the indent tag will be ignored. Additional information can be included with the tag.
+
+The beginning tag is "*INDENT-OFF*" and the ending tag is "*INDENT-ON*". They may be used anywhere in the program with the following condition; parsing is partially disabled between the tags. Disabling partial statements may result in incorrect formatting after the ending tag. If this happens expand the tags to include additional code.
+
+The following retains the format of a preprocessor define:
+
+// *INDENT-OFF*
+#define FOO_DECLARE_int32_(name) \
+        FOO_API_ extern ::Int32 FOO_FLAG(name)
+// *INDENT-ON*
+Disable Line
+
+Artistic Style cannot always determine the usage of symbols with more than one meaning. For example an asterisk (*) can be multiplication, a pointer, or a pointer dereference. The "&" and "&&" symbols are a similar problem.
+
+If a symbol is being padded incorrectly, padding it manually may fix the problem. If it is still being padded incorrectly, then disabling the formatting may be necessary. To avoid having to use the "disable block" tags above, a single line disable is available.
+
+A line-end comment tag "*NOPAD* will disable the "pad-oper", "align-pointer", and "align-reference" options. Parsing does NOT stop and all other formatting will be applied to the line. The tag applies to the one line only.
+
+The following prevents the operator padding from changing:
+
+size_t foo = (unsigned int) -1;  // *NOPAD*" [3]
+
+• "Bracket Style Options
+
+Bracket Style options define the bracket style to use. All options default to 4 spaces per indent, indented with spaces. By default, none of the styles indent namespaces. Other indentations are indicated in the individual style description. All options will break the brackets for one line blocks and will break one line statements. To change this use the option keep-one-line-blocks and/or keep-one-line-statements described in the Formatting Options section
+
+ 
+
+default bracket style
+If no bracket style is requested, the default bracket style will be used. The opening brackets are not changed and the closing brackets will be broken from the preceding line. There are a few exceptions to this.
+
+ 
+
+--style=allman / --style=bsd / --style=break / -A1
+Allman style uses broken brackets.
+
+int Foo(bool isBar)
+{
+    if (isBar)
+    {
+        bar();
+        return 1;
+    }
+    else
+        return 0;
+}
+ 
+
+--style=java / --style=attach / -A2
+Java style uses attached brackets.
+
+int Foo(bool isBar) {
+    if (isBar) {
+        bar();
+        return 1;
+    } else
+        return 0;
+}
+ 
+
+--style=kr / --style=k&r / --style=k/r / -A3
+Kernighan & Ritchie style uses linux brackets. Opening brackets are broken from namespaces, classes, and function definitions. Brackets are attached to everything else including statements within a function, arrays, structs, and enums.
+
+Using the k&r option may cause problems because of the &. This can be resolved by enclosing the k&r in quotes (e.g. ‑‑style="k&r") or by using one of the alternates ‑‑style=kr or ‑‑style=k/r.
+
+int Foo(bool isBar)
+{
+    if (isBar) {
+        bar();
+        return 1;
+    } else
+        return 0;
+}
+ 
+
+--style=stroustrup / -A4
+Stroustrup style uses stroustrup brackets. Brackets are broken from function definitions only. Brackets are attached to everything else including namespaces, classes, and statements within a function, arrays, structs, and enums. This style frequently is used with an indent of 5 spaces.
+
+int Foo(bool isBar)
+{
+    if (isBar) {
+        bar();
+        return 1;
+    } else
+        return 0;
+}
+ 
+
+--style=whitesmith / -A5
+Whitesmith style uses broken, indented brackets. Switch blocks and class blocks are indented to prevent a 'hanging indent' with following case statements and C++ class modifiers (public, private, protected). 
+
+int Foo(bool isBar)
+    {
+    if (isBar)
+        {
+        bar();
+        return 1;
+        }
+    else
+        return 0;
+    }
+ 
+
+--style=vtk / -A15
+VTK (Visualization Toolkit) style uses broken, indented brackets, except for the opening bracket. Switch blocks are indented to prevent a 'hanging indent' with following case statements. 
+
+int Foo(bool isBar)
+{
+    if (isBar)
+        {
+        bar();
+        return 1;
+        }
+    else
+        return 0;
+}
+ 
+
+--style=banner / -A6
+Banner style uses attached, indented brackets. Switch blocks and class blocks are indented to prevent a 'hanging indent' with following case statements and C++ class modifiers (public, private, protected). 
+
+int Foo(bool isBar) {
+    if (isBar) {
+        bar();
+        return 1;
+        }
+    else
+        return 0;
+    }
+ 
+
+--style=gnu / -A7
+GNU style uses broken brackets and indented blocks. This style frequently is used with an indent of 2 spaces.
+
+Extra indentation is added to blocks within a function. The opening bracket for namespaces, classes, and functions is not indented.
+
+int Foo(bool isBar)
+{
+    if (isBar)
+        {
+            bar();
+            return 1;
+        }
+    else
+        return 0;
+}
+ 
+
+--style=linux / --style=knf / -A8
+Linux style uses linux brackets. Opening brackets are broken from namespace, class, and function definitions. Brackets are attached to everything else including statements within a function, arrays, structs, and enums. Minimum conditional indent is one-half indent. If you want a different minimum conditional indent use the K&R style instead. This style works best with a large indent. It frequently is used with an indent of 8 spaces.
+
+Also known as Kernel Normal Form (KNF) style, this is the style used in the Linux kernel.
+
+int Foo(bool isBar)
+{
+        if (isFoo) {
+                bar();
+                return 1;
+        } else
+                return 0;
+}
+ 
+
+--style=horstmann / -A9
+Horstmann style uses run-in brackets. Brackets are broken and allow run-in statements. Switches are indented to allow a run-in to the opening switch block. This style frequently is used with an indent of 3 spaces.
+
+int Foo(bool isBar)
+{   if (isBar)
+    {   bar();
+        return 1;
+    }
+    else
+        return 0;
+}
+ 
+
+--style=1tbs / --style=otbs / -A10
+"One True Brace Style" uses linux brackets and adds brackets to unbracketed one line conditional statements. Opening brackets are broken from namespaces, classes, and function definitions. Brackets are attached to everything else including statements within a function, arrays, structs, and enums. 
+
+In the following example brackets have been added to the "return 0;" statement. The option ‑‑add‑one‑line‑brackets can also be used with this style.
+
+int Foo(bool isBar)
+{
+    if (isFoo) {
+        bar();
+        return 1;
+    } else {
+        return 0;
+    }
+}
+ 
+
+--style=google / -A14
+Google style uses attached brackets and indented class access modifiers. See the indent-modifiers option for an example of the indented modifiers format. This style frequently is used with an indent of 2 spaces.
+
+int Foo(bool isBar) {
+    if (isBar) {
+        bar();
+        return 1;
+    } else
+        return 0;
+}
+ 
+
+--style=pico / -A11
+Pico style uses run-in brackets and attached closing brackets. Opening brackets are broken and allow run-in statements. The closing bracket is attached to the last line in the block. Switches are indented to allow a run-in to the opening switch block. The style implies keep-one-line-blocks and keep-one-line-statements. If add-brackets is used they will be added as one-line brackets. This style frequently is used with an indent of 2 spaces.
+
+int Foo(bool isBar)
+{   if (isBar)
+    {   bar();
+        return 1; }
+    else
+        return 0; }
+ 
+
+--style=lisp / --style=python / -A12
+Lisp style uses attached opening and closing brackets. Opening brackets are attached at the end of the statement. The closing bracket is attached to the last line in the block. The style implies keep-one-line-statements but NOT keep-one-line-blocks. This style does not support one-line brackets. If add-one-line-brackets is used they will be added as multiple-line brackets.
+
+int Foo(bool isBar) {
+    if (isBar) {
+        bar()
+        return 1; }
+    else
+        return 0; }
+ 
+
+• Tab Options
+
+The following examples show whitespace characters. A space is indicated with a . (dot), a tab is indicated by a > (greater than).
+
+default indent
+If no indentation option is set, the default option of 4 spaces will be used (e.g. -s4 --indent=spaces=4 ).
+
+with default values:
+
+void Foo() {
+....if (isBar1
+............&& isBar2)    // indent of this line can be changed with min-conditional-indent
+........bar();
+}
+ 
+
+--indent=spaces / --indent=spaces=# / -s#
+Indent using # spaces per indent (e.g. -s3 --indent=spaces=3 ). # must be between 2 and 20. Not specifying # will result in a default of 4 spaces per indent.
+
+with indent=spaces=3
+
+void Foo() {
+...if (isBar1
+.........&& isBar2)    // indent of this line can be changed with min-conditional-indent
+......bar();
+}
+ 
+
+--indent=tab / --indent=tab=# / -t / -t#
+Indent using tabs for indentation, and spaces for continuation line alignment. This ensures that the code is displayed correctly  regardless of the viewer’s tab size. Treat each indent as # spaces (e.g. -t6 / --indent=tab=6). # must be between 2 and 20. If no # is set, treats indents as 4 spaces.
+
+with indent=tab:
+
+void Foo() {
+>   if (isBar1
+>   ........&& isBar2)    // indent of this line can be changed with min-conditional-indent
+>   >   bar();
+}
+with style=linux, indent=tab=8:
+
+void Foo()
+{
+>       if (isBar1
+>       ....&& isBar2)    // indent of this line can NOT be changed with style=linux
+>       >       bar();
+}
+ 
+
+--indent=force-tab / --indent=force-tab=# / -T / -T#
+Indent using all tab characters, if possible. If a continuation line is not an even number of tabs, spaces will be added at the end. Treat each tab as # spaces (e.g. -T6 / --indent=force-tab=6). # must be between 2 and 20. If no # is set, treats tabs as 4 spaces.
+
+with indent=force-tab:
+
+void Foo() {
+>   if (isBar1
+>   >   >   && isBar2)    // indent of this line can be changed with min-conditional-indent
+>   >   bar();
+}
+ 
+
+--indent=force-tab-x / --indent=force-tab-x=# / -xT / -xT# 
+This force-tab option allows the tab length to be set to a length that is different than the indent length. This may cause the indentation to be a mix of both tabs and spaces. Tabs will be used to indent, if possible. If a tab indent cannot be used, spaces will be used instead.
+
+This option sets the tab length. Treat each tab as # spaces (e.g. -xT6 / --indent=force-tab-x=6). # must be between 2 and 20. If no # is set, treats tabs as 8 spaces. To change the indent length from the default of 4 spaces the option "indent=force-tab" must also be used.
+
+with indent=force-tab-x (default tab length of 8 and default indent length of 4):
+
+void Foo() {
+....if (isBar1
+>       ....&& isBar2)    // indent of this line can be changed with min-conditional-indent
+>       bar();
+}
+ 
+
+• Bracket Modify Options
+
+--attach-namespaces / -xn
+Attach brackets to a namespace statement. This is done regardless of the bracket style being used.
+
+the bracket is always attached to a namespace statement:
+
+namespace FooName {
+...
+}
+ 
+
+--attach-classes / -xc
+Attach brackets to a class statement. This is done regardless of the bracket style being used.
+
+the bracket is always attached to a class statement:
+
+class FooClass {
+...
+};
+ 
+
+--attach-inlines / -xl
+Attach brackets to class and struct inline function definitions. This is not done for run-in type brackets (Horstmann and Pico styles). This option is effective for C++ files only.
+
+all brackets are always attached to class and struct inline function definitions:
+
+class FooClass
+{
+    void Foo() {
+    ...
+    }
+};
+ 
+
+--attach-extern-c / -xk
+Attach brackets to a bracketed extern "C" statement. This is done regardless of the bracket style being used. This option is effective for C++ files only.
+
+An extern "C" statement that is part of a function definition is formatted according to the requested bracket style. Bracketed extern "C" statements are unaffected by the bracket style and this option is the only way to change them.
+
+this option attaches brackets to a bracketed extern "C" statement:
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+but function definitions are formatted according to the requested bracket style:
+
+extern "C" EXPORT void STDCALL Foo()
+{}
+ 
+
+• Indentation Options
+
+--indent-classes / -C
+Indent 'class' and 'struct' blocks so that the entire block is indented. The struct blocks are indented only if an access modifier, 'public:', 'protected:' or 'private:', is declared somewhere in the struct. This option is effective for C++ files only.
+
+class Foo
+{
+public:
+    Foo();
+    virtual ~Foo();
+};
+becomes:
+
+class Foo
+{
+    public:
+        Foo();
+        virtual ~Foo();
+};
+ 
+
+--indent-modifiers / -xG
+Indent 'class' and 'struct' access modifiers, 'public:', 'protected:' and 'private:', one half indent. The rest of the class is not indented. This option is effective for C++ files only. If used with indent‑classes this option will be ignored.
+
+class Foo
+{
+public:
+    Foo();
+    virtual ~Foo();
+};
+becomes:
+
+class Foo
+{
+  public:
+    Foo();
+    virtual ~Foo();
+};
+ 
+
+--indent-switches / -S
+Indent 'switch' blocks so that the 'case X:' statements are indented in the switch block. The entire case block is indented.
+
+switch (foo)
+{
+case 1:
+    a += 1;
+    break;
+
+case 2:
+{
+    a += 2;
+    break;
+}
+}
+becomes:
+
+switch (foo)
+{
+    case 1:
+        a += 1;
+        break;
+
+    case 2:
+    {
+        a += 2;
+        break;
+    }
+}
+ 
+
+--indent-cases / -K
+Indent 'case X:' blocks from the 'case X:' headers. Case statements not enclosed in blocks are NOT indented.
+
+switch (foo)
+{
+    case 1:
+        a += 1;
+        break;
+
+    case 2:
+    {
+        a += 2;
+        break;
+    }
+}
+becomes:
+
+switch (foo)
+{
+    case 1:
+        a += 1;
+        break;
+
+    case 2:
+        {
+            a += 2;
+            break;
+        }
+}
+ 
+
+--indent-namespaces / -N
+Add extra indentation to namespace blocks. This option has no effect on Java files.
+
+namespace foospace
+{
+class Foo
+{
+    public:
+        Foo();
+        virtual ~Foo();
+};
+}
+becomes:
+
+namespace foospace
+{
+    class Foo
+    {
+        public:
+            Foo();
+            virtual ~Foo();
+    };
+}
+ 
+
+--indent-labels / -L
+Add extra indentation to labels so they appear 1 indent less than the current indentation, rather than being flushed to the left (the default).
+
+void Foo() {
+    while (isFoo) {
+        if (isFoo)
+            goto error;
+        ...
+error:
+        ...
+        }
+}
+becomes (with indented 'error:'):
+
+void Foo() {
+    while (isFoo) {
+        if (isFoo)
+            goto error;
+        ... 
+    error:
+        ...
+        }
+}
+ 
+
+--indent-preproc-block / -xW
+Indent preprocessor blocks at bracket level zero, and immediately within a namespace. There are restrictions on what will be indented. Blocks within methods, classes, arrays, etc, will not be indented. Blocks containing brackets or multi-line define statements will not be indented. Without this option the preprocessor block is not indented.
+
+#ifdef _WIN32
+#include <windows.h>
+#ifndef NO_EXPORT
+#define EXPORT
+#endif
+#endif
+becomes:
+
+#ifdef _WIN32
+    #include <windows.h>
+    #ifndef NO_EXPORT
+        #define EXPORT
+    #endif
+#endif
+ 
+
+--indent-preproc-define / -w
+Indent multi-line preprocessor definitions ending with a backslash. Should be used with --convert-tabs for proper results. Does a pretty good job, but cannot perform miracles in obfuscated preprocessor definitions. Without this option the preprocessor statements remain unchanged.
+
+#define Is_Bar(arg,a,b) \
+(Is_Foo((arg), (a)) \
+|| Is_Foo((arg), (b)))
+becomes:
+
+#define Is_Bar(arg,a,b) \
+    (Is_Foo((arg), (a)) \
+     || Is_Foo((arg), (b)))
+ 
+
+--indent-preproc-cond / -xw
+Indent preprocessor conditional statements to the same level as the source code.
+
+        isFoo = true;
+#ifdef UNICODE
+        text = wideBuff;
+#else
+        text = buff;
+#endif
+becomes:
+
+        isFoo = true;
+        #ifdef UNICODE
+        text = wideBuff;
+        #else
+        text = buff;
+        #endif
+ 
+
+--indent-col1-comments / -Y
+Indent C++ comments beginning in column one. By default C++ comments beginning in column one are assumed to be commented‑out code and not indented. This option will allow the comments to be indented with the code.
+
+void Foo()\n"
+{
+// comment
+    if (isFoo)
+        bar();
+}
+becomes:
+
+void Foo()\n"
+{
+    // comment
+    if (isFoo)
+        bar();
+}
+ 
+
+--min-conditional-indent=# / -m#
+Set the minimal indent that is added when a header is built of multiple lines. This indent helps to easily separate the header from the command statements that follow. The value for # indicates a number of indents and is a minimum value. The indent may be greater to align with the data on the previous line.
+The valid values are:
+0 - no minimal indent. The lines will be aligned with the paren on the preceding line.
+1 - indent at least one additional indent.
+2 - indent at least two additional indents.
+3 - indent at least one-half an additional indent. This is intended for large indents (e.g. 8).
+The default value is 2, two additional indents.
+
+// default setting makes this non-bracketed code clear
+if (a < b
+        || c > d)
+    foo++;
+
+// but creates an exaggerated indent in this bracketed code
+if (a < b
+        || c > d)
+{
+    foo++;
+}
+becomes (when setting --min-conditional-indent=0):
+
+// setting makes this non-bracketed code less clear
+if (a < b
+    || c > d)
+    foo++;
+
+// but makes this bracketed code clearer
+if (a < b
+    || c > d)
+{
+    foo++;
+}
+ 
+
+--max-instatement-indent=# / -M#
+Set the  maximum of # spaces to indent a continuation line. The # indicates a number of columns and must not be greater than 120. If no # is set, the default value of 40 will be used. A maximum of less than two indent lengths will be ignored. This option will prevent continuation lines from extending too far to the right. Setting a larger value will allow the code to be extended further to the right.
+
+fooArray[] = { red,
+         green,
+         blue };
+
+fooFunction(barArg1,
+         barArg2,
+         barArg3);
+becomes (with larger value):
+
+fooArray[] = { red,
+               green,
+               blue };
+
+fooFunction(barArg1,
+            barArg2,
+            barArg3);
+ 
+
+Padding Options
+
+--break-blocks / -f
+Pad empty lines around header blocks (e.g. 'if', 'for', 'while'...).
+
+isFoo = true;
+if (isFoo) {
+    bar();
+} else {
+    anotherBar();
+}
+isBar = false;
+becomes:
+
+isFoo = true;
+
+if (isFoo) {
+    bar();
+} else {
+    anotherBar();
+}
+
+isBar = false;
+ 
+
+--break-blocks=all / -F
+Pad empty lines around header blocks (e.g. 'if', 'for', 'while'...). Treat closing header blocks (e.g. 'else', 'catch') as stand-alone blocks.
+
+isFoo = true;
+if (isFoo) {
+    bar();
+} else {
+    anotherBar();
+}
+isBar = false;
+becomes:
+
+isFoo = true;
+
+if (isFoo) {
+    bar();
+
+} else {
+    anotherBar();
+}
+
+isBar = false;
+ 
+
+--pad-oper / -p 
+Insert space padding around operators. Any end of line comments will remain in the original column, if possible. Note that there is no option to unpad. Once padded, they stay padded.
+
+if (foo==2)
+    a=bar((b-c)*a,d--);
+becomes:
+
+if (foo == 2)
+    a = bar((b - c) * a, d--);
+ 
+
+--pad-paren / -P 
+Insert space padding around parenthesis on both the outside and the inside. Any end of line comments will remain in the original column, if possible.
+
+if (isFoo((a+2), b))
+    bar(a, b);
+becomes:
+
+if ( isFoo ( ( a+2 ), b ) )
+    bar ( a, b );
+ 
+
+--pad-paren-out / -d 
+Insert space padding around parenthesis on the outside only. Parentheses that are empty will not be padded. Any end of line comments will remain in the original column, if possible. This can be used with unpad-paren below to remove unwanted spaces.
+
+if (isFoo((a+2), b))
+    bar(a, b);
+becomes:
+
+if (isFoo ( (a+2), b) )
+    bar (a, b);
+ 
+
+--pad-first-paren-out / -xd 
+Insert space padding around the first parenthesis in a series on the outside only. Parentheses that are empty will not be padded. Any end of line comments will remain in the original column, if possible. This can be used with unpad-paren below to remove unwanted spaces. If used with pad‑paren or pad‑paren‑out, this option will be ignored. If used with pad‑paren‑in, the result will be the same as pad‑paren.
+
+if (isFoo((a+2), b))
+    bar(a, b);
+becomes:
+
+if (isFoo ((a+2), b))
+    bar (a, b);
+ 
+
+--pad-paren-in / -D 
+Insert space padding around parenthesis on the inside only. Any end of line comments will remain in the original column, if possible. This can be used with unpad-paren below to remove unwanted spaces.
+
+if (isFoo((a+2), b))
+    bar(a, b);
+becomes:
+
+if ( isFoo( ( a+2 ), b ) )
+    bar( a, b );
+ 
+
+--pad-header / -H 
+Insert space padding between a header (e.g. 'if', 'for', 'while'...) and the following paren. Any end of line comments will remain in the original column, if possible. This can be used with unpad-paren to remove unwanted spaces.
+
+if(isFoo((a+2), b))
+    bar(a, b);
+becomes:
+
+if (isFoo((a+2), b))
+    bar(a, b);
+ 
+
+--unpad-paren / -U 
+Remove extra space padding around parenthesis on the inside and outside. Any end of line comments will remain in the original column, if possible. This option can be used in combination with the paren padding options pad‑paren, pad‑paren‑out, pad‑paren‑in, and pad‑header above. Only padding that has not been requested by other options will be removed.
+
+For example, if a source has parens padded on both the inside and outside, and you want inside only. You need to use unpad-paren to remove the outside padding, and pad‑paren‑in to retain the inside padding. Using only pad‑paren‑in would not remove the outside padding.
+
+if ( isFoo( ( a+2 ), b ) )
+    bar ( a, b );
+becomes (with no padding option requested):
+
+if(isFoo((a+2), b))
+    bar(a, b);
+ 
+
+--delete-empty-lines / -xe
+Delete empty lines within a function or method. Empty lines outside of functions or methods are NOT deleted. If used with break-blocks or break-blocks=all it will delete all lines EXCEPT the lines added by the break-blocks options.
+
+void Foo()
+{
+
+    foo1 = 1;
+
+    foo2 = 2;
+
+}
+becomes:
+
+void Foo()
+{
+    foo1 = 1;
+    foo2 = 2;
+}
+ 
+
+--fill-empty-lines / -E
+Fill empty lines with the white space of the previous line.
+
+ 
+
+--align-pointer=type   / -k1
+--align-pointer=middle / -k2
+--align-pointer=name   / -k3 
+Attach a pointer or reference operator (*, &, or ^) to either the variable type (left) or variable name (right), or place it between the type and name (middle). The spacing between the type and name will be preserved, if possible. This option is for C/C++, C++/CLI, and C# files. To format references separately use the following align-reference option.
+
+char* foo1;
+char & foo2;
+String ^s1;
+becomes (with align-pointer=type):
+
+char* foo1;
+char& foo2;
+String^ s1;
+char* foo1;
+char & foo2;
+String ^s1;
+becomes (with align-pointer=middle):
+
+char * foo1;
+char & foo2;
+String ^ s1;
+char* foo1;
+char & foo2;
+String ^s1;
+becomes (with align-pointer=name):
+
+char *foo1;
+char &foo2;
+String ^s1;
+ 
+
+--align-reference=none   / -W0
+--align-reference=type   / -W1
+--align-reference=middle / -W2
+--align-reference=name   / -W3 
+This option will align references separate from pointers. Pointers are not changed by this option. If pointers and references are to be aligned the same, use the previous align-pointer option. The option align-reference=none will not change the reference alignment. The other options are the same as for align-pointer. This option is for C/C++, C++/CLI, and C# files.
+
+char &foo1;
+becomes (with align-reference=type):
+
+char& foo1;
+char& foo2;
+becomes (with align-reference=middle):
+
+char & foo2;
+char& foo3;
+becomes (with align-reference=name):
+
+char &foo3;
+ 
+
+• Formatting Options
+
+--break-closing-brackets / -y 
+When used with --style=java, --style=kr, --style=stroustrup, --style=linux, or --style=1tbs, this breaks closing headers (e.g. 'else', 'catch', ...) from their immediately preceding closing brackets. Closing header brackets are always broken with the other styles.
+
+void Foo(bool isFoo) {
+    if (isFoo) {
+        bar();
+    } else {
+        anotherBar();
+    }
+}
+becomes (a broken 'else'):
+
+void Foo(bool isFoo) {
+    if (isFoo) {
+        bar();
+    }
+    else {
+        anotherBar();
+    }
+}
+ 
+
+--break-elseifs / -e
+Break "else if" header combinations into separate lines. This option has no effect if keep-one-line-statements is used, the "else if" statements will remain as they are.
+
+If this option is NOT used, "else if" header combinations will be placed on a single line.
+
+if (isFoo) {
+    bar();
+}
+else if (isFoo1()) {
+    bar1();
+}
+else if (isFoo2()) {
+    bar2;
+}
+becomes:
+
+if (isFoo) {
+    bar();
+}
+else
+    if (isFoo1()) {
+        bar1();
+    }
+    else
+        if (isFoo2()) {
+            bar2();
+        }
+ 
+
+--add-brackets / -j 
+Add brackets to unbracketed one line conditional statements (e.g. 'if', 'for', 'while'...). The statement must be on a single line. The brackets will be added according to the currently requested predefined style or bracket type. If no style or bracket type is requested the brackets will be attached. If --add-one-line-brackets is also used the result will be one line brackets.
+
+if (isFoo)
+    isFoo = false;
+becomes:
+
+if (isFoo) {
+    isFoo = false;
+}
+ 
+
+--add-one-line-brackets / -J 
+Add one line brackets to unbracketed one line conditional statements (e.g. 'if', 'for', 'while'...). The statement must be on a single line. The option implies --keep-one-line-blocks and will not break the one line blocks.
+
+if (isFoo)
+    isFoo = false;
+becomes:
+
+if (isFoo)
+    { isFoo = false; }
+ 
+
+--remove-brackets / -xj
+Remove brackets from conditional statements (e.g. 'if', 'for', 'while'...). The statement must be a single statement on a single line. If --add-brackets or --add-one-line-brackets is also used the result will be to add brackets. Brackets will not be removed from "One True Brace Style", --style=1tbs.
+
+if (isFoo)
+{
+    isFoo = false;
+}
+becomes:
+
+if (isFoo)
+    isFoo = false;
+ 
+
+--keep-one-line-blocks / -O 
+Don't break one-line blocks.
+
+if (isFoo)
+{ isFoo = false; cout << isFoo << endl; }
+remains unchanged.
+
+ 
+
+--keep-one-line-statements / -o 
+Don't break complex statements and multiple statements residing on a single line.
+
+if (isFoo)
+{
+    isFoo = false; cout << isFoo << endl;
+}
+remains unchanged.
+
+if (isFoo) DoBar();
+remains unchanged.
+
+ 
+
+--convert-tabs / -c
+Converts tabs into spaces in the non-indentation part of the line. The number of spaces inserted will maintain the spacing of the tab. The current setting for spaces per tab is used. It may not produce the expected results if convert-tabs is used when changing spaces per tab. Tabs are not replaced in quotes.
+
+ 
+
+--close-templates / -xy
+Closes whitespace in the angle brackets of template definitions. Closing the ending angle brackets is now allowed by the C++11 standard. Be sure your compiler supports this before making the changes.
+
+Stack< int,List< int > > stack1;
+becomes:
+
+Stack<int,List<int>> stack1;
+ 
+
+--remove-comment-prefix / -xp
+Remove the preceding '*' in a multi-line comment that begins a line. A trailing '*', if present, is also removed. Text that is less than one indent is indented to one indent. Text greater than one indent is not changed. Multi-line comments that begin a line but without the preceding '*' are indented to one indent for consistency. This can slightly modify the indentation of commented out blocks of code. Lines containing all '*' are left unchanged. Extra spacing is removed from the comment close '*/'.
+
+/*
+ * comment line 1
+ * comment line 2
+ */
+becomes:
+
+/*
+    comment line 1
+    comment line 2
+*/
+ 
+
+--max-code-length=#   / -xC# 
+--break-after-logical / -xL
+The option max‑code‑length will break a line if the code exceeds # characters. The valid values are 50 thru 200. Lines without logical conditionals will break on a logical conditional (||, &&, ...), comma, paren, semicolon, or space.
+
+Some code will not be broken, such as comments, quotes, and arrays. If used with keep‑one‑line‑blocks or add-one-line-brackets the blocks will NOT be broken. If used with keep‑one‑line‑statements the statements will be broken at a semicolon if the line goes over the maximum length. If there is no available break point within the max code length, the line will be broken at the first available break point after the max code length.
+
+By default logical conditionals will be placed first on the new line. The option break‑after‑logical will cause the logical conditionals to be placed last on the previous line. This option has no effect without max‑code‑length.
+
+if (thisVariable1 == thatVariable1 || thisVariable2 == thatVariable2 || thisVariable3 == thatVariable3)
+    bar();
+becomes:
+
+if (thisVariable1 == thatVariable1
+        || thisVariable2 == thatVariable2
+        || thisVariable3 == thatVariable3)
+    bar();
+becomes (with break‑after‑logical):
+
+if (thisVariable1 == thatVariable1 ||
+        thisVariable2 == thatVariable2 ||
+        thisVariable3 == thatVariable3)
+    bar();
+ 
+
+--mode=c
+--mode=cs
+--mode=java
+Indent a C type, C#, or Java file. C type files are C, C++, C++/CLI, and Objective-C.  The option is usually set from the file extension for each file. You can override the setting with this entry. It will be used for all files regardless of the file extension. It allows the formatter to identify language specific syntax such as C++ classes, templates, and keywords.
+
+ 
+
+Objective‑C Options
+
+Because of the longer indents sometimes needed for Objective‑C, the option "max-instatement-indent" may need to be increased. If you are not getting the paren and square bracket alignment you want, try increasing this value. The option is described in the "Indentation Options" section.
+
+--align-method-colon / -xM
+Align the colons in Objective‑C method declarations. This option is effective for Objective‑C files only.
+
+-(void)deleteKey:(id)key
+    atIndex:(int)index
+    ofNode:(Node*)node;
+becomes:
+
+-(void)deleteKey:(id)key
+         atIndex:(int)index
+          ofNode:(Node*)node;
+ 
+
+--pad-method-prefix / -xQ
+Insert space padding after the '-' or '+' Objective‑C method prefix. This will add exactly one space. Any additional spaces will be deleted. This option is effective for Objective‑C files only.
+
+-(void)foo1;
++(void)foo2;
+becomes:
+
+- (void)foo1;
++ (void)foo2;
+ 
+
+--unpad-method-prefix / -xR
+Remove all space padding after the '-' or '+' Objective‑C method prefix. If used with pad‑method‑prefix, this option will be ignored. This option is effective for Objective‑C files only.
+
+- (void)foo1;
++ (void)foo2;
+becomes:
+
+-(void)foo1;
++(void)foo2;
+ 
+
+--pad-method-colon=none   / -xP0
+--pad-method-colon=all    / -xP1
+--pad-method-colon=after  / -xP2
+--pad-method-colon=before / -xP3 
+Add or remove space padding before or after the colons in an Objective‑C method call. These options will pad exactly one space. Any additional spaces will be deleted. Colons immediately preceding a paren will not be padded. This option is effective for Objective‑C files only.
+
+with pad-method-colon=none:
+
+[node insertKey:key];
+with pad-method-colon=all:
+
+[node insertKey : key];
+with pad-method-colon=after:
+
+[node insertKey: key];
+with pad-method-colon=before:
+
+[node insertKey :key];
+ 
+
+Other Options
+
+These are non-formatting options available for the command-line. They can also be included in an options file.
+
+--suffix=####
+Append the suffix #### instead of '.orig' to original file name (e.g. --suffix=.bak). If this is to be a file extension, the dot '.' must be included. Otherwise the suffix will be appended to the current file extension.
+
+--suffix=none / -n
+Do not retain a backup of the original file. The original file is purged after it is formatted.
+
+--recursive / -r / -R
+For each directory in the command line, process all subdirectories recursively. When using the recursive option the file name statement should contain a wildcard. Linux users should place the file path and name in double quotes so the shell will not resolve the wildcards (e.g. "$HOME/src/*.cpp"). Windows users should place the file path and name in double quotes if the path or name contains spaces.
+
+--dry-run
+Perform a trial run with no changes made to the files. The report will be output as usual.
+
+--exclude=####
+Specify a file or sub directory #### to be excluded from processing. 
+
+Excludes are matched from the end of the file path. An exclude option of "templates" will exclude ALL directories named "templates". An exclude option of "cpp/templates" will exclude ALL "cpp/templates" directories. You may proceed backwards in the directory tree to exclude only the required directories.
+
+Specific files may be excluded in the same manner. An exclude option of "default.cpp" will exclude ALL files named "default.cpp". An exclude option of "python/default.cpp" will exclude ALL files named "default.cpp" contained in a "python" subdirectory. You may proceed backwards in the directory tree to exclude only the required files.
+
+Wildcards are NOT allowed. There may be more than one exclude statement. The file path and name may be placed in double quotes (e.g. ‑‑exclude="foo bar.cpp").
+
+--ignore-exclude-errors / -i
+Allow processing to continue if there are errors in the "exclude=###" options.
+This option lets the excludes for several projects be entered in a single option file. This option may be placed in the same option file as the excludes. It will display the unmatched excludes. The following option will not display the unmatched excludes.
+
+--ignore-exclude-errors-x / -xi
+Allow processing to continue if there are errors in the "exclude=###" options.
+This option lets the excludes for several projects be entered in a single option file. This option may be placed in the same option file as the excludes. It will NOT display the unmatched excludes. The preceding option will display the unmatched excludes.
+--errors-to-stdout / -X
+Print errors to standard-output rather than to standard-error.
+This option should be helpful for systems/shells that do not have a separate output to standard-error, such as in Windows95.
+
+--preserve-date / -Z
+Preserve the original file's date and time modified. The time modified will be changed a few micro seconds to force the changed files to compile. This option is not effective if redirection is used to rename the input file.
+
+--verbose / -v
+Verbose display mode. Display optional information, such as release number and statistical data.
+
+--formatted / -Q
+Formatted files display mode. Display only the files that have been formatted. Do not display files that are unchanged.
+
+--quiet / -q
+Quiet display mode. Suppress all output except error messages.
+
+--lineend=windows / -z1
+--lineend=linux   / -z2
+--lineend=macold  / -z3 
+Force use of the specified line end style. Valid options are windows (CRLF), linux (LF), and macold (CR). MacOld style is the format for Mac OS 9 and earlier. OS X uses the Linux style. If one of these options is not used the line ends will be determined automatically from the input file.
+
+When redirection is used on Windows the output will always have Windows line ends. This option will be ignored.
+
+ 
+
+Command Line Only
+
+These options are available for the command-line only. They are NOT available in an options file.
+
+--options=####
+Specify an options file #### to read and use. It must contain a file path for the file. This will allow the file name to be changed from astylerc or .astylerc.
+
+--options=none
+Disable the default options file. Only the command-line parameters will be used.
+
+--ascii / -I
+The displayed output will be ascii characters only. The text will be displayed in English and numbers will not be formatted. The short option must be by itself, it cannot be concatenated with other options.
+
+--version / -V
+Print version number and quit. The short option must be by itself, it cannot be concatenated with other options.
+
+--help / -h / -?
+Print a help message and quit. The short option must be by itself, it cannot be concatenated with other options.
+
+--html / -!
+Open the HTML help file "astyle.html" in the default browser and quit. The short option must be by itself, it cannot be concatenated with other options. The documentation must be installed in the standard install path (/usr/share/doc/astyle/html for Linux or %PROGRAMFILES%\AStyle\doc for Windows). If installed to a different path use html=###.
+
+--html=####
+Open a HTML help file in the default browser using the file path #### and quit. A HTML file other than "astyle.help" may be specified. The path may include a directory path and a file name, or a file name only (e.g. html=install.html). If only a file name is used it is assumed to be in the standard install path (/usr/share/doc/astyle/html for Linux or %PROGRAMFILES%\AStyle\doc for Windows). In both cases the file name must include the html extension. File paths containing spaces must be enclosed in quotes.
+
+On Linux the HTML file is opened using the script "xdg-open" from the install package "xdg-utils". This should be installed by default on most distributions.
+
+Any HTML file can be opened by this option. The files you are likely to need are astyle.html (the default), install.html, and index.html."[3]
+
+REFERENCES
+[1] https://google.github.io/styleguide/cppguide.html
+[2] https://gcc.gnu.org/wiki/CppConventions
+[3] http://astyle.sourceforge.net/astyle.html
