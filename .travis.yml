@@ -123,7 +123,7 @@ script:
   # Testing: Use both run_tests (to see the output) and test (to error out).
   - catkin run_tests  # This always returns 0, but looks pretty.
   - catkin test  # This will return non-zero if a test fails.
-  - cpplint --verbose=5 --recursive src/
+  - cpplint --verbose=5 --recursive src/ #cpplint
 # limit build to only master branch
 branches:
     only:
