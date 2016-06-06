@@ -48,6 +48,15 @@ language:
   - generic
 cache:
   - apt
+python:
+  - 3.5
+  - 3.4
+  - 3.3
+  - 3.2
+  - 2.7
+  - 2.6
+  - pypy
+  - pypy3
 
 # Configuration variables. All variables are global now, but this can be used to
 # trigger a build matrix for different ROS distributions if desired.
@@ -91,6 +100,8 @@ install:
   # Add the package under integration to the workspace using a symlink.
   - cd ~/catkin_ws/src
   - ln -s $CI_SOURCE_PATH .
+  #Added for cpplint
+  - sudo pip install cpplint
 
 # Install all dependencies, using wstool and rosdep.
 # wstool looks for a ROSINSTALL_FILE defined in the environment variables.
@@ -112,7 +123,7 @@ script:
   # Testing: Use both run_tests (to see the output) and test (to error out).
   - catkin run_tests  # This always returns 0, but looks pretty.
   - catkin test  # This will return non-zero if a test fails.
-
+  - cpplint --verbose=5 --recursive src/
 # limit build to only master branch
 branches:
     only:
